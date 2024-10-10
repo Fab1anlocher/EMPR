@@ -1,0 +1,54 @@
+---
+title: "Homework1.Rmd"
+output:
+  pdf_document: default
+  html_document: default
+date: "2024-10-10"
+---
+
+
+# Needed Packagaes 
+# install.packages("ggplot2")
+
+
+library(ggplot2)
+
+
+# Task 1 - Data Frame 
+
+#   (Load the mpg dataset as a Data Frame)
+data(mpg)
+df <- as.data.frame(mpg)
+
+# Check the Data Frame
+head(df)
+
+
+
+
+# Task 2 - Categorical variables (Frequency tables, bar charts, pie chart)
+
+# Create a frequency table for the 'drv' variable
+freq_table <- as.data.frame(table(mpg$drv))
+
+# Calculate relative frequency and percentage
+freq_table$rel_Freq <- round(freq_table$Freq / sum(freq_table$Freq), 2)
+freq_table$Percentage <- round(freq_table$rel_Freq * 100, 200)
+
+# Rename the columns for clarity
+colnames(freq_table) <- c("drv", "Freq", "rel_Freq", "Percentage")
+
+# Print the frequency table
+print(freq_table)
+
+
+# Create a bar chart for the 'drv' variable with custom colors
+ggplot(freq_table, aes(x = drv, y = Freq, fill = drv)) +
+  geom_bar(stat = "identity") 
+  
+  
+  
+
+
+
+
