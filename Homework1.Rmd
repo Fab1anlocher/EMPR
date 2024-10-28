@@ -10,27 +10,32 @@ date: "2024-10-10"
 # Needed Packagaes 
 # install.packages("ggplot2")
 
+---
 
-install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("tidyr")
+```{r setup, include=FALSE}
+# Only shows plot, hides loading output
 
+knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
+library(tidyverse)
+library(palmerpenguins)
+library(rmarkdown)
+library(tinytex)
+library(xtable)
+library(patchwork)
+library(gridExtra)
 library(dplyr)
 library(tidyr)
-
-
 
 # Task 1 - Data Frame 
 
 #   (Load the mpg dataset as a Data Frame)
-data(mpg)
-df <- as.data.frame(mpg)
+
+df <- as.data.frame
+  data(mpg)
 
 # Check the Data Frame
 head(df)
-
-
 
 # Create a frequency table for the 'drv' variable
 freq_table <- as.data.frame(table(mpg$drv))
@@ -201,9 +206,14 @@ ggplot(df_proportions, aes(x = drv, y = proportion, fill = class)) +
 
 # 2: Task 2 
 # Scatter plot to show the association between engine displacement and highway mileage
+
 ggplot(mpg, aes(x = displ, y = hwy, shape = fl, color = class)) +
-  geom_point(size = 3) +                                 # Points sized for better visibility
-  geom_smooth(method = "lm", linetype = "dashed", color = "black", se = FALSE) + # Line of best fit
+  geom_point(size = 3) +                                 
+  
+  # Points sized for better visibility
+  
+  geom_smooth(method = "lm", linetype = "dashed", color = "black", se = FALSE) + 
+  # Line of best fit
   labs(
     title = "Association between Engine Displacement and Highway Mileage",
     x = "Engine Displacement (L)",
@@ -214,18 +224,92 @@ ggplot(mpg, aes(x = displ, y = hwy, shape = fl, color = class)) +
   theme_minimal()
 
 # 3: task 3
-ggplot(data = mpg, aes(x = cty, y = hwy)) + geom_point()
-ggplot(data = mpg, aes(x = cty, y = hwy)) + geom_count()
 
 
-# Scatter Plot with Trend Line
-ggplot(data = mpg, aes(x = cty, y = hwy)) +
-  geom_point() +
-  geom_smooth(method = "lm", color = "blue", se = FALSE) +  # Adds a trend line
-  labs(title = "Scatter Plot with Trend Line: City vs. Highway Mileage", 
-       x = "City Mileage (mpg)", 
-       y = "Highway Mileage (mpg)")
+---
+
+# Task 3: Comparison of `geom_point()` and `geom_count()`
+
+In this task, we compare `geom_point()` and `geom_count()` using the `mpg` dataset and display both plots side by side.
+
+# Load the `mpg` dataset
+   data(mpg)
+
+# Create geom_point plot
+point_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) + 
+              geom_point() + 
+              labs(title = "Scatterplot using geom_point", x = "City MPG", y = "Highway MPG")
+
+# Create geom_count plot
+count_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) + 
+              geom_count() + 
+              labs(title = "Count Plot using geom_count", x = "City MPG", y = "Highway MPG")
+
+# Display the plots side by side
+grid.arrange(point_plot, count_plot, ncol = 2)
+
+# Add Interpretation
+# Describe the difference: The geom_count() plot shows larger points where there are multiple data points overlapping, whereas geom_point() displays each observation individually.
+
+# Task 4
+
+# Load the penguins dataset
+
+data(penguins)
+
+# Initial bar plot for proportion
+ggplot(data = penguins, aes(fill = island, x = species)) + 
+geom_bar(aes(y = after_stat(prop))) +
+labs(title = "Proportion of Species by Island", x = "Penguin Species", y = "Proportion")
+
+# Absolute counts with labels
+ggplot(data = penguins, aes(fill = island, x = species)) + 
+geom_bar(position = "stack") +
+geom_text(stat = "count", aes(label = ..count..), vjust = -0.5) +
+labs(title = "Counts of Species by Island", x = "Penguin Species", y = "Count") +
+theme_minimal()
+
+# Add Interpretation
+# Explain that the improved version shows the absolute counts for each species and the labels make the exact values visible, improving readability.
        
+
+# Task 5
+
+# Load the diamonds dataset
+
+data(diamonds)
+
+# Basic bar chart
+bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) + 
+            geom_bar(position = "dodge") +
+            labs(title = "Bar Chart of Cut and Clarity", x = "Cut", y = "Count") +
+            theme_minimal()
+
+# Stacked bar chart
+stacked_bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) + 
+                    geom_bar(position = "stack") +
+                    labs(title = "Stacked Bar Chart of Cut and Clarity", x = "Cut", y = "Count") +
+                    theme_minimal()
+
+# Pie chart
+pie_chart <- ggplot(diamonds, aes(x = "", fill = clarity)) + 
+             geom_bar(width = 1, position = "fill") + 
+             coord_polar("y") + 
+             facet_wrap(~cut) + 
+             labs(title = "Pie Chart of Cut and Clarity") +
+             theme_minimal() +
+             theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+
+# Display the charts side by side
+grid.arrange(bar_plot, stacked_bar_plot, pie_chart, ncol = 3)
+
+
+# Add Interpretation
+# Describe the advantages and disadvantages of each chart
+# The bar chart allows easy comparison of clarity within each cut.
+# The stacked bar chart provides an overview of the total while showing the internal distribution.
+# The pie chart illustrates proportions but may be harder to read compared to bar charts.
+
        
 #stand 27.10 Aufgabe 1 fast alles gemacht ausser die zweiten letzten Seiten mosaic plot
 # Visualizing condition. Das hat mega viel arbeit gebeben und mann könnte immer noch alles verbessern, schaue doch mal drüber und verbessere je nach dem noch etwas. Aufgabe zwei und drei habe ich mithilfe von chatgpt gemacht, habe aber wirklich gar keine ahnung ob das irgendwie richtig ist, das unbedingt noch verbessern. 
