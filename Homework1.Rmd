@@ -6,60 +6,29 @@ output:
 date: "2024-10-10"
 ---
 
+# List of required packages
+packages <- c("rlang", "ggplot2", "tidyverse", "palmerpenguins", 
+              "rmarkdown", "tinytex", "xtable", "patchwork", 
+              "gridExtra", "dplyr", "tidyr")
 
-# Needed Packagaes 
-# install.packages("ggplot2")
-
----
-
-# Only shows plot, hides loading output
-
-# Set options for chunk output in RMarkdown
-knitr::opts_chunk$set(echo = TRUE)
-
-# Function to check if packages are installed, install if not, and load them
-install_and_load <- function(package) {
-  if (!requireNamespace(package, quietly = TRUE)) {
-    install.packages(package, dependencies = TRUE)
-  }
-  library(package, character.only = TRUE)
-}
-
-# Update the rlang package first to meet version requirements
-install.packages("rlang")
-
-# List of packages to install and load
-packages <- c("ggplot2", "tidyverse", "palmerpenguins", "rmarkdown", 
-              "tinytex", "xtable", "patchwork", "gridExtra", "dplyr", "tidyr")
-
-# Install and load each package
+# Install missing packages and load them
 for (pkg in packages) {
-  install_and_load(pkg)
+  if (!require(pkg, character.only = TRUE)) {
+    install.packages(pkg)
+    library(pkg, character.only = TRUE)
+  } else {
+    library(pkg, character.only = TRUE)
+  }
 }
-
-
-knitr::opts_chunk$set(echo = TRUE)
-library(ggplot2)
-library(tidyverse)
-library(palmerpenguins)
-library(rmarkdown)
-library(tinytex)
-library(xtable)
-library(patchwork)
-library(gridExtra)
-library(dplyr)
-library(tidyr)
-
 
 # Task 1 - Data Frame 
 
-#   (Load the mpg dataset as a Data Frame)
-
-df <- as.data.frame
-  data(mpg)
+# Load the mpg dataset as a Data Frame
+df <- as.data.frame(mpg)
 
 # Check the Data Frame
 head(df)
+
 
 # Create a frequency table for the 'drv' variable
 freq_table <- as.data.frame(table(mpg$drv))
@@ -182,8 +151,8 @@ ggplot(df, aes(x = drv, fill = class)) +
 
 
 # Clustered bar chart showing association between drv and class
-ggplot(data = mpg, aes(x = cty, y = hwy)) + 
-    geom_point()
+df_complete <- as.data.frame(table(mpg$drv, mpg$class))
+colnames(df_complete) <- c("drv", "class", "n")
 
 ggplot(df_complete, aes(x = drv, y = n, fill = class)) +
   geom_bar(stat = "identity", position = "dodge", color = "black") +   # Side-by-side bars with black borders
@@ -202,6 +171,9 @@ ggplot(df_complete, aes(x = drv, y = n, fill = class)) +
   )
 
 # Stacked bar chart with proportions
+df_proportions <- df_complete
+df_proportions$proportion <- df_proportions$n / ave(df_proportions$n, df_proportions$drv, FUN = sum)
+
 ggplot(df_proportions, aes(x = drv, y = proportion, fill = class)) +
   geom_bar(stat = "identity", position = "fill", color = "black") +   # Stacked bar chart with black borders
   labs(
@@ -216,6 +188,16 @@ ggplot(df_proportions, aes(x = drv, y = proportion, fill = class)) +
     panel.border = element_rect(color = "black", fill = NA),            # Black border around the plot
     panel.grid = element_blank()                                        # Remove grid lines
   )
+
+
+
+
+
+
+
+
+
+
 
 
 # Es fehlt Visualizing conditional distributions und Joint distributions: mosaic plot
@@ -266,17 +248,7 @@ ggplot(mpg, aes(x = displ, y = hwy, shape = fl, color = class)) +
   ) +
   theme_minimal()
 
-# 3: task 3
-
-
----
-
-# Task 3: Comparison of `geom_point()` and `geom_count()`
-
-In this task, we compare `geom_point()` and `geom_count()` using the `mpg` dataset and display both plots side by side.
-
-# Load the `mpg` dataset
-   data(mpg)
+# Task 3: Comparison of geom_point() and geom_count()
 
 # Create geom_point plot
 point_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) + 
@@ -297,7 +269,6 @@ grid.arrange(point_plot, count_plot, ncol = 2)
 # Task 4
 
 # Load the penguins dataset
-
 data(penguins)
 
 # Initial bar plot for proportion
