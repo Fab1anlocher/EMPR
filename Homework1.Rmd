@@ -17,7 +17,6 @@ library(gridExtra)
 ```
 
 # Task 1 - Data Frame
-
 ```{r}
 # Load the mpg dataset as a Data Frame
 df <- as.data.frame(mpg)
@@ -42,7 +41,6 @@ print(freq_table)
 ```
 
 # Visualizations
-
 ```{r}
 # Create a bar chart
 ggplot(freq_table, aes(x = drv, y = Freq, fill = drv)) +
@@ -94,7 +92,6 @@ ggplot(df, aes(x = displ, y = hwy)) +
 ```
 
 # Additional Plots and Analyses
-
 ```{r}
 # Horizontal boxplot showing the association between highway mileage (hwy) and drive system (drv)
 ggplot(df, aes(y = drv, x = hwy)) +
@@ -141,21 +138,24 @@ ggplot(df_proportions, aes(x = drv, y = proportion, fill = class)) +
                                "minivan" = "cyan", "pickup" = "blue", "subcompact" = "purple", "suv" = "magenta")) +
   theme_minimal()
 ```
-
-# Scatter Plot with Smoothing
-
+# Task 2: Association between engine displacement and highway mileage
 ```{r}
 # Scatter plot to show the association between engine displacement and highway mileage
-ggplot(mpg, aes(x = displ, y = hwy, shape = fl, color = class)) +
-  geom_point(size = 3) +
-  geom_smooth(method = "lm", linetype = "dashed", color = "black", se = FALSE) +
-  labs(title = "Association between Engine Displacement and Highway Mileage", x = "Engine Displacement (L)", y = "Highway Mileage (mpg)", shape = "Fuel Type", color = "Vehicle Class") +
-  theme_minimal()
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(shape = fl, color = class)) +
+  geom_smooth(method = "lm", se = F) +
+  labs(title = "Association between Engine Displacement and Highway Mileage",
+       x = "Engine Displacement (liters)",
+       y = "Highway Mileage (mpg)",
+       color = "Car Class",
+       shape = "Fuel Type")
 ```
-
 # Task 3: Comparison of geom_point() and geom_count()
-
 ```{r}
+# Original geom_poin
+ggplot(data = mpg, aes(x = cty, y = hwy)) + geom_point()
+ggplot(data = mpg, aes(x = cty, y = hwy)) + geom_count()
+
 # Create geom_point plot
 point_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) + 
               geom_point() + 
@@ -169,32 +169,38 @@ count_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) +
 # Display the plots side by side
 grid.arrange(point_plot, count_plot, ncol = 2)
 ```
-
-# Task 4
-
+# Task 4: Penguins
 ```{r}
 # Load the penguins dataset
 data(penguins)
 
-# Initial bar plot for proportion
-ggplot(data = penguins, aes(fill = island, x = species)) + 
-geom_bar(aes(y = after_stat(prop))) +
-labs(title = "Proportion of Species by Island", x = "Penguin Species", y = "Proportion")
+# Original (copy of the homework)
+ggplot(data = penguins, aes(fill = island, x = species)) +
+geom_bar(aes(y = after_stat(prop)))
+
+
+# Problems with the original plot 
+# In the original plot, you can only see which penguin species are present on each island. For example, on Torgersen Island, there are only Adelie penguins, # whereas Biscoe Island has both Gentoo and Adelie penguins. However, it does not give a sense of where there are larger populations or the total number of birds on each island. That’s why we added the total counts to each bar in our updated plot. Additionally, the proportions are now displayed accurately, which enhances the clarity of the visualization. For instance, you can immediately see that while Adelie penguins are the most common species, Biscoe Island has the largest overall penguin population.
+
+
+# Improved version with absolute counts displayed over proportionally filled bars
+p <- ggplot(data = penguins, aes(x = species, fill = island)) + 
+  geom_bar(position = "stack") +
+  geom_text(stat = "count",
+            aes(label = after_stat(count)),
+            position = position_stack(vjust = 0.5),
+            color = "white",
+            vjust = 1.5) +
+  labs(title = "Count of Penguin Species by Island with Proportion",
+       x = "Penguin Species",
+       y = "Count") +
+  scale_fill_manual(values = c("Biscoe" = "steelblue", "Dream" = "coral", "Torgersen" = "lightgreen")) +
+  theme_minimal()
+
+# Display the plot
+p
 ```
-
-```{r}
-# Absolute counts with labels
-ggplot(data = penguins, aes(fill = island, x = species)) + 
-geom_bar(position = "stack") +
-geom_text(stat = "count", aes(label = ..count..), vjust = -0.5) +
-labs(title = "Counts of Species by Island", x = "Penguin Species", y =
-
- "Count") +
-theme_minimal()
-```
-
 # Task 5
-
 ```{r}
 # Load the diamonds dataset
 data(diamonds)
@@ -227,6 +233,26 @@ pie_chart <- ggplot(diamonds, aes(x = "", fill = clarity)) +
 # Display the charts side by side
 grid.arrange(bar_plot, stacked_bar_plot, pie_chart, ncol = 3)
 ```
-#wer hat was gemacht Text Fabian 
-#wer hat was gemacht Text Samuel 
+# Which Slides Did We Use for Each Task
+
+- **Creating R Project**: Referenced *EMPR_03b_Projects_Reports_AS2024.pdf*.
+
+- **Task 2**: 
+- For Task 2, we primarily referenced EMPR_03_Visualization1_AS2024.pdf, which covers most aspects of scatter plots. Pages 4, 7, and 14 were especially helpful    -for our work.
+
+   
+- **Task 4**: 
+   - For Task 4, we primarily referenced EMPR_04_Visualization2_AS2024.pdf, page 8 (“Add counts to bars: geom_text() or geom_label()”), and adapted the code to -    -suit our requirements
+
+
+
+
+
+
+
+#Workload
+#We sat down at the beginning and divided up the tasks. The first thing we did was set up a git repository so that we could easily work together and always see what the other person had done. We organised the tasks so that Fabian did tasks 1 and 2 and Samuel did tasks 3-5. Afterwards we had a short meeting and discussion about the status of the work. We actually got on quite well. Even though we hadn't finished some things yet. We then agreed that Fabian would check and correct Samuel's tasks and the other way round.
+
+
+
 
