@@ -240,13 +240,16 @@ grid.arrange(bar_plot, stacked_bar_plot, pie_chart, ncol = 3)
 - **Task 2**: 
 - For Task 2, we primarily referenced EMPR_03_Visualization1_AS2024.pdf, which covers most aspects of scatter plots. Pages 4, 7, and 14 were especially helpful    -for our work.
 
+- **Task 3**: 
+- For Task 3, we primarily referenced EMPR_03_Visualization1_AS2024.pdf, which covers most aspects of scatter plots. Pages 2, 4, and 5 were especially helpful    -for our work.
    
 - **Task 4**: 
-   - For Task 4, we primarily referenced EMPR_04_Visualization2_AS2024.pdf, page 8 (“Add counts to bars: geom_text() or geom_label()”), and adapted the code to -    -suit our requirements
+- For Task 4, we primarily referenced EMPR_04_Visualization2_AS2024.pdf, page 8 (“Add counts to bars: geom_text() or geom_label()”), and adapted the code to -    -suit our requirements
 
-
-
-
+- **Task 5**: 
+- For Task 5, we primarily referenced EMPR_04_Visualization2_AS2024.pdf;
+Pages 3 and 10 provided guidance on creating bar charts using geom_bar() and explained the use of the position argument for arranging bars (defaulting to "stack" for stacked bar charts, with "dodge" used for grouped bar charts).
+Page 12 introduced pie charts and explained how to create them using coord_polar().Page 13 demonstrated examples of applying coord_polar() to geom_bar() to create pie charts, similar to the approach used in our code.
 
 
 
@@ -254,5 +257,69 @@ grid.arrange(bar_plot, stacked_bar_plot, pie_chart, ncol = 3)
 #We sat down at the beginning and divided up the tasks. The first thing we did was set up a git repository so that we could easily work together and always see what the other person had done. We organised the tasks so that Fabian did tasks 1 and 2 and Samuel did tasks 3-5. Afterwards we had a short meeting and discussion about the status of the work. We actually got on quite well. Even though we hadn't finished some things yet. We then agreed that Fabian would check and correct Samuel's tasks and the other way round.
 
 
+#verbesserung task3? zusammen besprechen
+
+# Task 3: Comparison of geom_point() and geom_count()
+
+# Scatter plot using geom_point
+point_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) + 
+  geom_point(alpha = 0.6) +  # Add slight transparency for overlapping points
+  labs(title = "Scatterplot using geom_point", x = "City MPG", y = "Highway MPG") +
+  theme_minimal()
+
+# Count plot using geom_count
+count_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) + 
+  geom_count(color = "blue", alpha = 0.6) +  # Color to enhance density visibility
+  labs(title = "Count Plot using geom_count", x = "City MPG", y = "Highway MPG") +
+  theme_minimal()
+
+# Display plots side by side
+grid.arrange(point_plot, count_plot, ncol = 2)
+
+#explanation task3
+
+#For Task 3, we use geom_point() and geom_count() to explore the relationship between cty (city MPG) and hwy (highway MPG) in the mpg dataset. In the scatter plot with geom_point() (as suggested in the slides on visualizing distributions), each point represents an observation, which can obscure dense areas if points overlap. Adding slight transparency (alpha) mitigates this and reveals overlapping data points. In contrast, geom_count() changes the size of each point based on its count, providing a clear indication of where data points are densest, a recommendation seen in the slides for visual clarity when values overlap. Overall, geom_point() is ideal for datasets with low overlap, while geom_count() effectively highlights density in datasets with repeated values. These enhancements meet the general assignment criteria for readability and clarity in data presentation.
+
+
+#verbesserung task5? zusammen besprechen
+
+# Load the diamonds dataset
+data(diamonds)
+
+# Basic bar chart - Grouped by clarity with separate bars for each category
+bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) + 
+  geom_bar(position = "dodge") +  # position 'dodge' for grouped bars
+  labs(title = "Bar Chart of Cut by Clarity (Grouped)", 
+       x = "Diamond Cut", y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "bottom", legend.title = element_blank())
+
+# Stacked bar chart - Stacked by clarity for each category of cut
+stacked_bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) + 
+  geom_bar(position = "stack") +  # position 'stack' for stacked bars
+  labs(title = "Stacked Bar Chart of Cut by Clarity", 
+       x = "Diamond Cut", y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "bottom", legend.title = element_blank())
+
+# Pie chart - Displaying proportions of clarity within each cut category
+pie_chart <- ggplot(diamonds, aes(x = "", fill = clarity)) + 
+  geom_bar(width = 1, position = "fill") +  # use 'fill' to normalize each bar
+  coord_polar("y") +  # polar coordinates to create a pie chart
+  facet_wrap(~cut) +  # facet by 'cut' to show one pie chart per cut
+  labs(title = "Pie Chart of Cut by Clarity (Faceted)", 
+       x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(), 
+        axis.title.y = element_blank(), 
+        axis.text = element_blank(), 
+        legend.position = "bottom", 
+        legend.title = element_blank())
+
+# Display the charts side by side
+grid.arrange(bar_plot, stacked_bar_plot, pie_chart, ncol = 3)
+
+#comparison task 5
+#For this task, we created three visualizations to explore the distribution of clarity within each cut category in the diamonds dataset. The grouped bar chart, referencing slide 10, shows clarity levels side-by-side within each cut, making comparisons straightforward. The stacked bar chart, also inspired by slide 10, stacks clarity levels within each cut, emphasizing relative contributions to the total counts. Finally, the faceted pie chart, which uses guidance from slides 12 and 13 on polar coordinates, displays the proportional breakdown of clarity within each cut. While the grouped bar chart is best for clear comparisons, the stacked bar and pie charts provide insights into the relative proportions, each with their own visual strengths.
 
 
