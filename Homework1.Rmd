@@ -17,7 +17,7 @@ library(gridExtra)
 
 ## Task 1
 
-```{r}
+```{r echo=FALSE}
 # Load the mpg dataset as a Data Frame
 df <- as.data.frame(mpg)
 
@@ -25,7 +25,7 @@ df <- as.data.frame(mpg)
 head(df)
 ```
 
-```{r}
+```{r echo=FALSE}
 # Create a frequency table for the 'drv' variable
 freq_table <- as.data.frame(table(mpg$drv))
 
@@ -40,7 +40,7 @@ colnames(freq_table) <- c("drv", "Freq", "rel_Freq", "Percentage")
 print(freq_table)
 ```
 
-```{r}
+```{r echo=FALSE}
 # Create a bar chart
 ggplot(freq_table, aes(x = drv, y = Freq, fill = drv)) +
   geom_bar(stat = "identity") +
@@ -48,7 +48,7 @@ ggplot(freq_table, aes(x = drv, y = Freq, fill = drv)) +
   theme_minimal()
 ```
 
-```{r}
+```{r echo=FALSE}
 # Create a pie chart
 ggplot(freq_table, aes(x = "", y = Freq, fill = drv)) +
   geom_bar(stat = "identity", width = 1) +
@@ -58,38 +58,40 @@ ggplot(freq_table, aes(x = "", y = Freq, fill = drv)) +
   theme_minimal()
 ```
 
-```{r}
+```{r echo=FALSE}
 # Simple histogram with custom breaks
-ggplot(df, aes(x = hwy)) +
-  geom_histogram(breaks = c(10, 15, 20, 25, 30, 35, 40, 45), 
-      fill = "grey", color = "black") +
-  labs(title = "Histogram of Highway Mileage", x = "Highway", y = "Frequency") +
-  theme_minimal()
+hist(mpg$hwy, 
+     breaks = seq(10, 45, by = 5),main = "Histogram of Highway Mileage",
+     xlab = "Highway",
+     ylab = "Frequency",
+     col = "yellow")
+
 ```
 
-```{r}
-# Histogram with x-axis labeled from 15 to 45 in steps of 5
-ggplot(df, aes(x = hwy)) +
-  geom_histogram(binwidth = 2, fill = "grey", color = "black") +
-  labs(title = "Histogram of Highway Mileage", x = "Highway", y = "Frequency") +
-  scale_x_continuous(breaks = seq(15, 45, by = 5)) +
-  theme_minimal()
+```{r echo=FALSE}
+# Histogram with x-axis labeled from 12 to 45 in steps of 2
+
+hist(mpg$hwy, 
+     
+     breaks = seq(12, 45, by = 2),main = "Histogram of Highway Mileage",
+     xlab = "Highway",
+     ylab = "Frequency",
+     col = "orange")
+
 ```
 
-```{r}
+```{r echo=FALSE}
 # Simple Boxplot
-ggplot(df, aes(x = hwy)) +
-  geom_boxplot(fill = "grey", color = "black", outlier.shape = 21, 
-               outlier.fill = "white", outlier.color = "black") +
-  scale_x_continuous(breaks = seq(15, 45, by = 5), limits = c(10, 45), name = "Highway") +
-  labs(title = "Boxplot of Highway Mileage") +
-  theme_minimal()
+
+boxplot(mpg$hwy, horizontal=TRUE,main="Boxplot of Highway Mileage",xlab="Highway",
+        col="lightblue")
+
 ```
 
-```{r}
+```{r echo=FALSE}
 # Scatter plot with adjusted y-axis limits, no grid, and white points with black borders
 ggplot(df, aes(x = displ, y = hwy)) +
-  geom_point(color = "black", fill = "white", shape = 21) +
+  geom_point(color = "magenta", fill = "lightblue", shape = 21) +
   labs(title = "Relationship between Engine Displacement and Highway Mileage", 
        x = "Displacement", 
        y = "Highway Mileage (mpg)") +
@@ -97,20 +99,31 @@ ggplot(df, aes(x = displ, y = hwy)) +
   theme_minimal()
 ```
 
-```{r}
+```{r echo=FALSE}
 # boxplot showing the association between highway mileage and drive system 
 ggplot(df, aes(y = drv, x = hwy)) +
-  geom_boxplot(fill = "grey", color = "black", outlier.shape = 21, 
+  geom_boxplot(fill = "lightblue", color = "black", outlier.shape = 21, 
                outlier.fill = "white", outlier.color = "black") +
-  labs(title = "Association between Drive System and Highway Mileage",
-       y = "Drive System (drv)", 
-       x = "Highway Mileage (mpg)") +
-  scale_x_continuous(breaks = seq(15, 45, by = 5), limits = c(10, 45)) +
-  theme_minimal()
+  labs(title = "Association between Drive System and Highway Mileage", 
+       x = "hwy", y = "drv") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5)  # Center the title
+  ) +
+  scale_x_continuous(breaks = seq(15, 45, by = 5), limits = c(10, 45))
 
 ```
 
-```{r}
+```{r echo=FALSE}
+# Stacked bar chart
+barplot(table(mpg$drv),col = c("green","blue","cyan"),
+        main="Stacked bar chart",
+        xlab="drv",
+        ylab="hwy")
+ 
+```
+
+```{r echo=FALSE}
 # Stacked bar chart showing the distribution of vehicle classes within each drive type
 ggplot(df, aes(x = drv, fill = class)) +
   geom_bar(position = "stack", color = "black") +
@@ -118,18 +131,18 @@ ggplot(df, aes(x = drv, fill = class)) +
        x = "Drive System (drv)", 
        y = "Count", 
        fill = "Vehicle Class") +
-  scale_fill_manual(values = c("suv" = "magenta", 
-                               "subcompact" = "purple", 
-                               "pickup" = "blue",
-                               "minivan" = "cyan", 
-                               "midsize" = "limegreen", 
-                               "compact" = "yellow", 
-                               "2seater" = "red")) +
+  scale_fill_manual(values = c("2seater" = "red", 
+                             "compact" = "yellow", 
+                             "midsize" = "limegreen", 
+                             "minivan" = "cyan", 
+                             "pickup" = "blue", 
+                             "subcompact" = "purple", 
+                             "suv" = "magenta"))+
   theme_minimal()
 
 ```
 
-```{r}
+```{r echo=FALSE}
 # Clustered bar chart showing association between drv and class
 df_complete <- as.data.frame(table(mpg$drv, mpg$class))
 colnames(df_complete) <- c("drv", "class", "n")
@@ -148,7 +161,7 @@ ggplot(df_complete, aes(x = drv, y = n, fill = class)) +
   theme_minimal() 
 ```
 
-```{r}
+```{r echo=FALSE}
 # Stacked bar chart with proportions
 df_propor <- df_complete
 df_propor$proportion <- df_propor$n / ave(df_propor$n, df_propor$drv, FUN = sum)
@@ -160,20 +173,29 @@ ggplot(df_propor, aes(x = drv, y = proportion, fill = class)) +
        y = "Proportion", 
        fill = "Vehicle Class") +
   scale_y_continuous(labels = scales::percent) +
-  scale_fill_manual(values = c("2seater" = "red", 
-                               "compact" = "yellow", 
-                               "midsize" = "limegreen",
-                               "minivan" = "cyan", 
-                               "pickup" = "blue", 
-                               "subcompact" = "purple", 
-                               "suv" = "magenta")) +
+scale_fill_manual(values = c("suv" = "magenta", 
+                             "subcompact" = "purple", 
+                             "pickup" = "blue", 
+                             "minivan" = "cyan", 
+                             "midsize" = "limegreen", 
+                             "compact" = "yellow", 
+                             "2seater" = "red"))+
+
   theme_minimal()
+```
+
+```{r echo=FALSE}
+# Mosaic Plot
+mosaicplot(table(mpg$drv,mpg$class),
+           col = c("red","yellow","green","lightgreen","lightblue","blue","magenta"),
+           main="Mosaic plot",las = 1,xlab="",ylab="")
+ 
 ```
 
 ## Task 2: Association between engine displacement and highway mileage
 
-```{r}
-# Scatter plot to show the association between engine displacement and highway mileage
+```{r echo=FALSE}
+# Scatter plot to show the association between engine displacement and highway mileage -> EMPR_03_Visualization1_AS2024.pdf / pages 4,7 and 14
 ggplot(data = mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(shape = fl, color = class)) +
   geom_smooth(method = "lm", se = F) +
@@ -186,8 +208,8 @@ ggplot(data = mpg, aes(x = displ, y = hwy)) +
 
 ## Task 3: Comparison of geom_point() and geom_count()
 
-```{r}
-# Scatter plot using geom_point
+```{r echo=FALSE}
+# Scatter plot using geom_point -> EMPR_03_Visualization1_AS2024.pdf / pages 2,4 and 5
 point_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) + 
   geom_point(alpha = 0.6) +  # Add slight transparency for overlapping points
   labs(title = "Scatterplot using geom_point", x = "City MPG", y = "Highway MPG") +
@@ -204,11 +226,12 @@ grid.arrange(point_plot, count_plot, ncol = 2)
 
 ```
 
+## Explanation
 For Task 3, we use geom_point() and geom_count() to explore the relationship between cty (city MPG) and hwy (highway MPG) in the mpg dataset. In the scatter plot with geom_point() (as suggested in the slides on visualizing distributions),each point represents an observation, which can obscure dense areas if points overlap. Adding slight transparency (alpha) mitigates this and reveals overlapping data points. In contrast, geom_count() changes the size of each point based on its count,providing a clear indication of where data points are densest, a recommendation seen in the slides for visual clarity when values overlap. Overall, geom_point() is ideal for datasets with low overlap, while geom_count() effectively highlights density in datasets with repeated values. These enhancements meet the general assignment criteria for readability and clarity in data presentation.
 
 ## Task 4: Penguins
 
-```{r}
+```{r echo=FALSE}
 # Load the penguins dataset
 data(penguins)
 
@@ -217,7 +240,7 @@ ggplot(data = penguins, aes(fill = island, x = species)) +
 geom_bar(aes(y = after_stat(prop))) +
   labs(title = "Orginal Plot")
 
-# Improved version with absolute counts displayed over proportionally filled bars
+# Improved version with absolute counts displayed over proportionally filled bars -> EMPR_04_Visualization2_AS2024.pdf / page 8
 p <- ggplot(data = penguins, aes(x = species, fill = island)) + 
   geom_bar(position = "stack") +
   geom_text(stat = "count",
@@ -243,11 +266,11 @@ In the original plot, you can only see which penguin species are present on each
 
 ## Task 5: Diamond
 
-```{r fig.width=14, fig.height=5, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.width=14, fig.height=5, warning=FALSE, message=FALSE}
 # Load the diamonds dataset
 data(diamonds)
 
-# Basic bar chart - Clarity distribution grouped by diamond cut
+# Basic bar chart - Clarity distribution grouped by diamond cut -> EMPR_04_Visualization2_AS2024.pdf / pages 3 and 10
 bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) + 
   geom_bar(position = "dodge") +  # 'dodge' position for grouped bars
   labs(title = "Diamond Cut by Clarity (Grouped Bar Chart)", 
@@ -256,7 +279,7 @@ bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) +
   theme(legend.position = "bottom", legend.title = element_blank(),
         plot.margin = unit(c(1, 1, 1, 1), "cm"))  # Add margin for spacing
 
-# Stacked bar chart - Clarity distribution stacked within each cut category
+# Stacked bar chart - Clarity distribution stacked within each cut category -> EMPR_04_Visualization2_AS2024.pdf / pages 3 and 10
 stacked_bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) + 
   geom_bar(position = "stack") +  # 'stack' position for cumulative counts
   labs(title = "Diamond Cut by Clarity (Stacked Bar Chart)", 
@@ -265,7 +288,7 @@ stacked_bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) +
   theme(legend.position = "bottom", legend.title = element_blank(),
         plot.margin = unit(c(1, 1, 1, 1), "cm"))  # Add margin for spacing
 
-# Pie chart - Proportions of clarity within each cut category
+# Pie chart - Proportions of clarity within each cut category -> EMPR_04_Visualization2_AS2024.pdf / pages 12 and 13
 pie_chart <- ggplot(diamonds, aes(x = "", fill = clarity)) + 
   geom_bar(width = 1, position = "fill") +  # 'fill' to normalize each segment
   coord_polar("y") +  # Polar coordinates for pie chart effect
@@ -280,33 +303,18 @@ pie_chart <- ggplot(diamonds, aes(x = "", fill = clarity)) +
         legend.title = element_blank(),
         plot.margin = unit(c(1, 1, 1, 1), "cm"))  # Add margin for spacing
 
+# Pie chart - Proportions of clarity within each cut category -> EMPR_04_Visualization2_AS2024.pdf / pages 12 and 13
+bar <- ggplot(diamonds) + geom_bar(aes(cut))
+pie_chart1 <- bar + coord_polar()
+
 # Display the charts side by side with grid.arrange
-grid.arrange(bar_plot, stacked_bar_plot, pie_chart, ncol = 3)
+grid.arrange(bar_plot, stacked_bar_plot, pie_chart, pie_chart1, ncol = 4)
 ```
 
 ## comparison task 5
 
-For this task, we created three visualizations to explore the distribution of clarity within each cut category in the diamonds dataset. The grouped bar chart, referencing slide 10, shows clarity levels side-by-side within each cut, making comparisons straightforward. The stacked bar chart, also inspired by slide 10, stacks clarity levels within each cut, emphasizing relative contributions to the total counts. Finally, the faceted pie chart, which uses guidance from slides 12 and 13 on polar coordinates, displays the proportional breakdown of clarity within each cut. While the grouped bar chart is best for clear comparisons, the stacked bar and pie charts provide insights into the relative proportions, each with their own visual strengths.
-
-# Which Slides Did We Use for Each Task
-
-**Creating R Project**: Referenced EMPR_03b_Projects_Reports_AS2024.pdf.
-
-**Task 2**:
-
-For Task 2, we primarily referenced EMPR_03_Visualization1_AS2024.pdf, which covers most aspects of scatter plots. Pages 4, 7, and 14 were especially helpful -for our work.
-
-**Task 3**:
-
-For Task 3, we primarily referenced EMPR_03_Visualization1_AS2024.pdf, which covers most aspects of scatter plots. Pages 2, 4, and 5 were especially helpful -for our work.
-
-**Task 4**:
-
-For Task 4, we primarily referenced EMPR_04_Visualization2_AS2024.pdf, page 8 (“Add counts to bars: geom_text() or geom_label()”), and adapted the code to - -suit our requirements
-
-**Task 5**:
-
-For Task 5, we primarily referenced EMPR_04_Visualization2_AS2024.pdf; Pages 3 and 10 provided guidance on creating bar charts using geom_bar() and explained the use of the position argument for arranging bars (defaulting to "stack" for stacked bar charts, with "dodge" used for grouped bar charts). Page 12 introduced pie charts and explained how to create them using coord_polar().Page 13 demonstrated examples of applying coord_polar() to geom_bar() to create pie charts, similar to the approach used in our code.
+For this task, we created four visualizations to explore the distribution of clarity within each cut category in the diamonds dataset. The grouped bar chart displays clarity levels side-by-side for each cut category, allowing straightforward comparisons of diamond counts by clarity, as seen on slide 10. The stacked bar chart also shows the same data but stacks clarity levels within each cut category. This visualization highlights the relative contributions of each clarity level to the total counts, enhancing our understanding of the dataset's composition. Next, the faceted pie chart provides insights into clarity proportions for each cut, displaying one pie chart per cut. This format illustrates the distribution of clarity levels clearly, utilizing polar coordinates as advised on slides 12 and 13. Finally, the alternative pie chart view transforms a basic bar chart into a pie chart using polar coordinates. While less detailed than the faceted version, it offers a quick overview of clarity proportions across all cut categories.
+In summary, the grouped bar chart excels for clear comparisons, while the stacked bar chart and both pie charts offer valuable insights into the relative proportions of clarity, each showcasing its unique strengths.
 
 **Workload**:
 
