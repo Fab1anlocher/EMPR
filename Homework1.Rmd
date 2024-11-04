@@ -13,6 +13,10 @@ date: "2024-10-10"
 library(tidyverse)
 library(palmerpenguins)
 library(gridExtra)
+
+# Set global chunk options for displaying multiple plots on the same page
+knitr::opts_chunk$set(fig.show = "hold", fig.width = 15, fig.height = 9)
+
 ```
 
 ## Task 1
@@ -266,49 +270,49 @@ In the original plot, you can only see which penguin species are present on each
 
 ## Task 5: Diamond
 
-```{r echo=FALSE, fig.width=14, fig.height=5, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.width=16, fig.height=10, warning=FALSE, message=FALSE}
 # Load the diamonds dataset
 data(diamonds)
 
-# Basic bar chart - Clarity distribution grouped by diamond cut -> EMPR_04_Visualization2_AS2024.pdf / pages 3 and 10
+# Basic bar chart - Clarity distribution grouped by diamond cut
 bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) + 
-  geom_bar(position = "dodge") +  # 'dodge' position for grouped bars
+  geom_bar(position = "dodge") +
   labs(title = "Diamond Cut by Clarity (Grouped Bar Chart)", 
        x = "Diamond Cut", y = "Count") +
   theme_minimal() +
   theme(legend.position = "bottom", legend.title = element_blank(),
-        plot.margin = unit(c(1, 1, 1, 1), "cm"))  # Add margin for spacing
+        plot.margin = unit(c(1, 1, 1, 1), "cm"))
 
-# Stacked bar chart - Clarity distribution stacked within each cut category -> EMPR_04_Visualization2_AS2024.pdf / pages 3 and 10
+# Stacked bar chart - Clarity distribution stacked within each cut category
 stacked_bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) + 
-  geom_bar(position = "stack") +  # 'stack' position for cumulative counts
+  geom_bar(position = "stack") +
   labs(title = "Diamond Cut by Clarity (Stacked Bar Chart)", 
        x = "Diamond Cut", y = "Count") +
   theme_minimal() +
   theme(legend.position = "bottom", legend.title = element_blank(),
-        plot.margin = unit(c(1, 1, 1, 1), "cm"))  # Add margin for spacing
+        plot.margin = unit(c(1, 1, 1, 1), "cm"))
 
-# Pie chart - Proportions of clarity within each cut category -> EMPR_04_Visualization2_AS2024.pdf / pages 12 and 13
+# Pie chart - Proportions of clarity within each cut category
 pie_chart <- ggplot(diamonds, aes(x = "", fill = clarity)) + 
-  geom_bar(width = 1, position = "fill") +  # 'fill' to normalize each segment
-  coord_polar("y") +  # Polar coordinates for pie chart effect
-  facet_wrap(~cut) +  # Faceting to display one pie chart per cut
-  labs(title = "Proportions of Clarity by Diamond Cut (Pie Chart)", 
-       x = NULL, y = NULL) +
+  geom_bar(width = 1, position = "fill") +
+  coord_polar("y") +
+  facet_wrap(~cut) +
+  labs(title = "Proportions of Clarity by Diamond Cut (Pie Chart)") +
   theme_minimal() +
   theme(axis.title.x = element_blank(), 
         axis.title.y = element_blank(), 
         axis.text = element_blank(), 
         legend.position = "bottom", 
         legend.title = element_blank(),
-        plot.margin = unit(c(1, 1, 1, 1), "cm"))  # Add margin for spacing
+        plot.margin = unit(c(1, 1, 1, 1), "cm"))
 
-# Pie chart - Proportions of clarity within each cut category -> EMPR_04_Visualization2_AS2024.pdf / pages 12 and 13
-bar <- ggplot(diamonds) + geom_bar(aes(cut))
-pie_chart1 <- bar + coord_polar()
+# Another pie chart using polar coordinates
+pie_chart1 <- ggplot(diamonds) + 
+  geom_bar(aes(cut)) + 
+  coord_polar()
 
-# Display the charts side by side with grid.arrange
-grid.arrange(bar_plot, stacked_bar_plot, pie_chart, pie_chart1, ncol = 4)
+# Display the charts in a 2x2 grid with adjusted spacing
+grid.arrange(bar_plot, stacked_bar_plot, pie_chart, pie_chart1)
 ```
 
 ## comparison task 5
@@ -318,4 +322,6 @@ In summary, the grouped bar chart excels for clear comparisons, while the stacke
 
 **Workload**:
 
--   We sat down at the beginning and divided up the tasks. The first thing we did was set up a git repository so that we could easily work together and always see what the other person had done. We organised the tasks so that Fabian did tasks 1 and 2 and Samuel did tasks 3-5. Afterwards we had a short meeting and discussion about the status of the work. We actually got on quite well. Even though we hadn't finished some things yet. We then agreed that Fabian would check and correct Samuel's tasks and the other way round.
+-   We sat down at the beginning and divided up the tasks. The first thing we did was set up a Git repository so that we could easily collaborate and continuously track each other’s progress. We organized the tasks so that Fabian took on tasks 1 and 2, while Samuel handled tasks 3-5. This clear division helped us focus and avoid overlapping efforts.
+After completing our initial assignments, we held a short meeting to discuss the status and share updates on our progress. This check-in proved beneficial, as it highlighted some areas that needed further refinement. Although a few items were still incomplete, we felt that we were moving in the right direction and understood what remained to be done.
+To ensure the quality of each other’s work, we decided that Fabian would review and make corrections to Samuel's tasks, and vice versa. This mutual review process not only helped catch errors but also facilitated a better understanding of each other's approach. By the end of the session, we felt more confident about our progress and looked forward to wrapping up the remaining tasks.
