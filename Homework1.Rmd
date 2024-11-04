@@ -6,9 +6,9 @@ output:
 date: "2024-10-10"
 ---
 
-## Packages and Data Setup
+```{r setup, include=FALSE, tidy.opts=list(width.cutoff=60)}
+### Packages and Data Setup
 
-```{r setup, include=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 # Load the necessary packages
 library(tidyverse)
 library(palmerpenguins)
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(fig.show = "hold", fig.width = 15, fig.height = 9)
 
 ```
 
-## Task 1
+## Task 1: Improved Plots
 
 ```{r echo=FALSE}
 # Load the mpg dataset as a Data Frame
@@ -49,7 +49,10 @@ print(freq_table)
 ggplot(freq_table, aes(x = drv, y = Freq, fill = drv)) +
   geom_bar(stat = "identity") +
   labs(title = "Frequency of Drive Types", x = "Drive Type (drv)", y = "Frequency") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 ```
 
 ```{r echo=FALSE}
@@ -59,7 +62,10 @@ ggplot(freq_table, aes(x = "", y = Freq, fill = drv)) +
   coord_polar(theta = "y") +
   scale_fill_manual(values = c("4" = "red", "f" = "green", "r" = "blue")) +
   labs(title = "Distribution of Drive Types", fill = "Drive Type (drv)") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 ```
 
 ```{r echo=FALSE}
@@ -100,7 +106,10 @@ ggplot(df, aes(x = displ, y = hwy)) +
        x = "Displacement", 
        y = "Highway Mileage (mpg)") +
   scale_y_continuous(breaks = seq(15, 45, by = 5), limits = c(0, NA), expand = c(0, 0)) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 ```
 
 ```{r echo=FALSE}
@@ -112,7 +121,7 @@ ggplot(df, aes(y = drv, x = hwy)) +
        x = "hwy", y = "drv") +
   theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5)  # Center the title
+    plot.title = element_text(hjust = 0.5, face = "bold")  # Center the title
   ) +
   scale_x_continuous(breaks = seq(15, 45, by = 5), limits = c(10, 45))
 
@@ -142,7 +151,10 @@ ggplot(df, aes(x = drv, fill = class)) +
                              "pickup" = "blue", 
                              "subcompact" = "purple", 
                              "suv" = "magenta"))+
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 
 ```
 
@@ -162,7 +174,10 @@ ggplot(df_complete, aes(x = drv, y = n, fill = class)) +
                                "pickup" = "blue", 
                                "subcompact" = "purple", 
                                "suv" = "magenta")) +
-  theme_minimal() 
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 ```
 
 ```{r echo=FALSE}
@@ -185,14 +200,17 @@ scale_fill_manual(values = c("suv" = "magenta",
                              "compact" = "yellow", 
                              "2seater" = "red"))+
 
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 ```
 
 ```{r echo=FALSE}
 # Mosaic Plot
 mosaicplot(table(mpg$drv,mpg$class),
            col = c("red","yellow","green","lightgreen","lightblue","blue","magenta"),
-           main="Mosaic plot",las = 1,xlab="",ylab="")
+           main="Mosaic plot",las = 0.5,xlab="",ylab="")
  
 ```
 
@@ -207,7 +225,10 @@ ggplot(data = mpg, aes(x = displ, y = hwy)) +
        x = "Engine Displacement (liters)",
        y = "Highway Mileage (mpg)",
        color = "Car Class",
-       shape = "Fuel Type")
+       shape = "Fuel Type") +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 ```
 
 ## Task 3: Comparison of geom_point() and geom_count()
@@ -217,20 +238,27 @@ ggplot(data = mpg, aes(x = displ, y = hwy)) +
 point_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) + 
   geom_point(alpha = 0.6) +  # Add slight transparency for overlapping points
   labs(title = "Scatterplot using geom_point", x = "City MPG", y = "Highway MPG") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 
 # Count plot using geom_count
 count_plot <- ggplot(data = mpg, aes(x = cty, y = hwy)) + 
   geom_count(color = "blue", alpha = 0.6) +  # Color to enhance density visibility
   labs(title = "Count Plot using geom_count", x = "City MPG", y = "Highway MPG") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 
 # Display plots side by side
 grid.arrange(point_plot, count_plot, ncol = 2)
 
 ```
 
-## Explanation
+### Explanation
+
 For Task 3, we use geom_point() and geom_count() to explore the relationship between cty (city MPG) and hwy (highway MPG) in the mpg dataset. In the scatter plot with geom_point() (as suggested in the slides on visualizing distributions),each point represents an observation, which can obscure dense areas if points overlap. Adding slight transparency (alpha) mitigates this and reveals overlapping data points. In contrast, geom_count() changes the size of each point based on its count,providing a clear indication of where data points are densest, a recommendation seen in the slides for visual clarity when values overlap. Overall, geom_point() is ideal for datasets with low overlap, while geom_count() effectively highlights density in datasets with repeated values. These enhancements meet the general assignment criteria for readability and clarity in data presentation.
 
 ## Task 4: Penguins
@@ -242,7 +270,10 @@ data(penguins)
 # Original (copy of the homework)
 ggplot(data = penguins, aes(fill = island, x = species)) +
 geom_bar(aes(y = after_stat(prop))) +
-  labs(title = "Orginal Plot")
+  labs(title = "Orginal Plot") +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 
 # Improved version with absolute counts displayed over proportionally filled bars -> EMPR_04_Visualization2_AS2024.pdf / page 8
 p <- ggplot(data = penguins, aes(x = species, fill = island)) + 
@@ -258,13 +289,16 @@ p <- ggplot(data = penguins, aes(x = species, fill = island)) +
   scale_fill_manual(values = c("Biscoe" = "steelblue",
                                "Dream" = "coral", 
                                "Torgersen" = "lightgreen")) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 
 # Display the plot
 p
 ```
 
-## Problems with the original plot
+### Problems with the original plot
 
 In the original plot, you can only see which penguin species are present on each island. For example, on Torgersen Island, there are only Adelie penguins, whereas Biscoe Island has both Gentoo and Adelie penguins. However, it does not give a sense of where there are larger populations or the total number of birds on each island. That’s why we added the total counts to each bar in our updated plot. Additionally, the proportions are now displayed accurately, which enhances the clarity of the visualization. For instance, you can immediately see that while Adelie penguins are the most common species, Biscoe Island has the largest overall penguin population.
 
@@ -281,7 +315,10 @@ bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) +
        x = "Diamond Cut", y = "Count") +
   theme_minimal() +
   theme(legend.position = "bottom", legend.title = element_blank(),
-        plot.margin = unit(c(1, 1, 1, 1), "cm"))
+        plot.margin = unit(c(1, 1, 1, 1), "cm")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 
 # Stacked bar chart - Clarity distribution stacked within each cut category
 stacked_bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) + 
@@ -290,7 +327,10 @@ stacked_bar_plot <- ggplot(diamonds, aes(x = cut, fill = clarity)) +
        x = "Diamond Cut", y = "Count") +
   theme_minimal() +
   theme(legend.position = "bottom", legend.title = element_blank(),
-        plot.margin = unit(c(1, 1, 1, 1), "cm"))
+        plot.margin = unit(c(1, 1, 1, 1), "cm")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 
 # Pie chart - Proportions of clarity within each cut category
 pie_chart <- ggplot(diamonds, aes(x = "", fill = clarity)) + 
@@ -304,24 +344,30 @@ pie_chart <- ggplot(diamonds, aes(x = "", fill = clarity)) +
         axis.text = element_blank(), 
         legend.position = "bottom", 
         legend.title = element_blank(),
-        plot.margin = unit(c(1, 1, 1, 1), "cm"))
+        plot.margin = unit(c(1, 1, 1, 1), "cm")) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 
 # Another pie chart using polar coordinates
 pie_chart1 <- ggplot(diamonds) + 
   geom_bar(aes(cut)) + 
-  coord_polar()
+  coord_polar() + 
+  labs(title = "Doughnut Chart", 
+       x = "Cut", y = "Count") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
 
 # Display the charts in a 2x2 grid with adjusted spacing
 grid.arrange(bar_plot, stacked_bar_plot, pie_chart, pie_chart1)
 ```
 
-## comparison task 5
+### Comparison
 
-For this task, we created four visualizations to explore the distribution of clarity within each cut category in the diamonds dataset. The grouped bar chart displays clarity levels side-by-side for each cut category, allowing straightforward comparisons of diamond counts by clarity, as seen on slide 10. The stacked bar chart also shows the same data but stacks clarity levels within each cut category. This visualization highlights the relative contributions of each clarity level to the total counts, enhancing our understanding of the dataset's composition. Next, the faceted pie chart provides insights into clarity proportions for each cut, displaying one pie chart per cut. This format illustrates the distribution of clarity levels clearly, utilizing polar coordinates as advised on slides 12 and 13. Finally, the alternative pie chart view transforms a basic bar chart into a pie chart using polar coordinates. While less detailed than the faceted version, it offers a quick overview of clarity proportions across all cut categories.
-In summary, the grouped bar chart excels for clear comparisons, while the stacked bar chart and both pie charts offer valuable insights into the relative proportions of clarity, each showcasing its unique strengths.
+For this task, we created four visualizations to explore the distribution of clarity within each cut category in the diamonds dataset. The grouped bar chart displays clarity levels side-by-side for each cut category, allowing straightforward comparisons of diamond counts by clarity, as seen on slide 10. The stacked bar chart also shows the same data but stacks clarity levels within each cut category. This visualization highlights the relative contributions of each clarity level to the total counts, enhancing our understanding of the dataset's composition. Next, the faceted pie chart provides insights into clarity proportions for each cut, displaying one pie chart per cut. This format illustrates the distribution of clarity levels clearly, utilizing polar coordinates as advised on slides 12 and 13. Finally, the alternative pie chart view transforms a basic bar chart into a pie chart using polar coordinates. While less detailed than the faceted version, it offers a quick overview of clarity proportions across all cut categories. In summary, the grouped bar chart excels for clear comparisons, while the stacked bar chart and both pie charts offer valuable insights into the relative proportions of clarity, each showcasing its unique strengths.
 
-**Workload**:
+### **Workload**
 
--   We sat down at the beginning and divided up the tasks. The first thing we did was set up a Git repository so that we could easily collaborate and continuously track each other’s progress. We organized the tasks so that Fabian took on tasks 1 and 2, while Samuel handled tasks 3-5. This clear division helped us focus and avoid overlapping efforts.
-After completing our initial assignments, we held a short meeting to discuss the status and share updates on our progress. This check-in proved beneficial, as it highlighted some areas that needed further refinement. Although a few items were still incomplete, we felt that we were moving in the right direction and understood what remained to be done.
-To ensure the quality of each other’s work, we decided that Fabian would review and make corrections to Samuel's tasks, and vice versa. This mutual review process not only helped catch errors but also facilitated a better understanding of each other's approach. By the end of the session, we felt more confident about our progress and looked forward to wrapping up the remaining tasks.
+We sat down at the beginning and divided up the tasks. The first thing we did was set up a Git repository so that we could easily collaborate and continuously track each other’s progress. We organized the tasks so that Fabian took on tasks 1 and 2, while Samuel handled tasks 3-5. This clear division helped us focus and avoid overlapping efforts. After completing our initial assignments, we held a short meeting to discuss the status and share updates on our progress. This check-in proved beneficial, as it highlighted some areas that needed further refinement. Although a few items were still incomplete, we felt that we were moving in the right direction and understood what remained to be done. To ensure the quality of each other’s work, we decided that Fabian would review and make corrections to Samuel's tasks, and vice versa. This mutual review process not only helped catch errors but also facilitated a better understanding of each other's approach. By the end of the session, we felt more confident about our progress and looked forward to wrapping up the remaining tasks.
